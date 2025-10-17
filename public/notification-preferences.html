@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Preferences</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/preferences.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Notification Preferences</h1>
+            <p>Manage how you receive attendance notifications</p>
+        </header>
+
+        <div class="preferences-container">
+            <!-- Email Notifications -->
+            <div class="preference-section">
+                <h2>Email Notifications</h2>
+                <div class="preference-item">
+                    <div class="preference-header">
+                        <h3>Enable Email Notifications</h3>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="emailEnabled" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <p class="preference-description">Receive email notifications for attendance events</p>
+                </div>
+
+                <div class="preference-item" id="emailOptions">
+                    <h3>Email Notification Types</h3>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="emailType" value="attendance_marked" checked>
+                            <span>Attendance Marked</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="emailType" value="late_arrival" checked>
+                            <span>Late Arrival Alerts</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="emailType" value="absence" checked>
+                            <span>Absence Notifications</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="emailType" value="daily_summary" checked>
+                            <span>Daily Summary</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="emailType" value="weekly_summary">
+                            <span>Weekly Summary</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMS Notifications -->
+            <div class="preference-section">
+                <h2>SMS Notifications</h2>
+                <div class="preference-item">
+                    <div class="preference-header">
+                        <h3>Enable SMS Notifications</h3>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="smsEnabled">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <p class="preference-description">Receive SMS notifications for important attendance events</p>
+                </div>
+
+                <div class="preference-item" id="smsOptions" style="display: none;">
+                    <h3>SMS Notification Types</h3>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="smsType" value="attendance_marked">
+                            <span>Attendance Marked</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="smsType" value="late_arrival" checked>
+                            <span>Late Arrival Alerts</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="smsType" value="absence" checked>
+                            <span>Absence Notifications</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reminders -->
+            <div class="preference-section">
+                <h2>Attendance Reminders</h2>
+                <div class="preference-item">
+                    <div class="preference-header">
+                        <h3>Enable Reminders</h3>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="reminderEnabled" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <p class="preference-description">Get reminded to mark your attendance</p>
+                </div>
+
+                <div class="preference-item" id="reminderOptions">
+                    <label>Reminder Time:</label>
+                    <input type="time" id="reminderTime" value="08:00" class="time-input">
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="preference-actions">
+                <button class="btn-primary" onclick="savePreferences()">Save Preferences</button>
+                <button class="btn-secondary" onclick="resetPreferences()">Reset to Default</button>
+            </div>
+
+            <!-- Success Message -->
+            <div class="message" id="successMessage" style="display: none;">
+                <p>Preferences saved successfully!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/preferences.js"></script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+/* QR Scanner Styles */
+.scanner-container {
+  padding: 30px 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: calc(100vh - 80px);
+}
+
+.scanner-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.scanner-section,
+.manual-entry-section {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.scanner-section h1,
+.manual-entry-section h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.scanner-section > p,
+.manual-entry-section > p {
+  color: #999;
+  margin-bottom: 20px;
+}
+
+.scanner-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.scanner-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.scanner-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.scanner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.scanner-frame {
+  width: 70%;
+  height: 70%;
+  border: 3px solid #667eea;
+  border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+  animation: pulse-frame 2s infinite;
+}
+
+@keyframes pulse-frame {
+  0%,
+  100% {
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5), 0 0 20px rgba(102, 126, 234, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5), 0 0 40px rgba(102, 126, 234, 0.8);
+  }
+}
+
+.scanner-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.scanner-controls .btn {
+  flex: 1;
+  min-width: 120px;
+}
+
+.manual-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.manual-form .form-group {
+  margin-bottom: 0;
+}
+
+.manual-form .btn {
+  width: 100%;
+}
+
+.message {
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.success-message {
+  background: #efe;
+  color: #3c3;
+  border: 1px solid #cfc;
+}
+
+.error-message {
+  background: #fee;
+  color: #c33;
+  border: 1px solid #fcc;
+}
+
+@media (max-width: 1024px) {
+  .scanner-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .scanner-container {
+    padding: 15px 0;
+  }
+
+  .scanner-section,
+  .manual-entry-section {
+    padding: 20px;
+  }
+
+  .scanner-box {
+    aspect-ratio: 1;
+  }
+
+  .scanner-controls {
+    flex-direction: column;
+  }
+
+  .scanner-controls .btn {
+    width: 100%;
+  }
+}

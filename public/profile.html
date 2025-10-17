@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Attendance System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-logo">
+            <div class="logo">A</div>
+            <span class="header-title">Attendance System</span>
+        </div>
+        <nav class="header-nav">
+            <a href="student-dashboard.html">Dashboard</a>
+            <a href="profile.html" class="active">Profile</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </nav>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="profile-container">
+        <div class="container">
+            <div class="profile-wrapper">
+                <!-- Profile Info -->
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <img id="profileImage" src="/placeholder.svg?height=150&width=150" alt="Profile" class="profile-pic">
+                        <div class="profile-info">
+                            <h1 id="fullName">User Name</h1>
+                            <p id="userRole">Student</p>
+                            <p id="userEmail">email@example.com</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Student ID:</span>
+                            <span class="detail-value" id="studentId">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Course:</span>
+                            <span class="detail-value" id="course">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Year Level:</span>
+                            <span class="detail-value" id="yearLevel">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Phone:</span>
+                            <span class="detail-value" id="phone">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Member Since:</span>
+                            <span class="detail-value" id="joinDate">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Profile Form -->
+                <div class="edit-card">
+                    <h2>Edit Profile</h2>
+
+                    <form id="editProfileForm" class="profile-form">
+                        <div class="form-group">
+                            <label for="editFirstName">First Name</label>
+                            <input type="text" id="editFirstName" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editLastName">Last Name</label>
+                            <input type="text" id="editLastName" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editEmail">Email</label>
+                            <input type="email" id="editEmail" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editPhone">Phone</label>
+                            <input type="tel" id="editPhone" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="profilePictureInput">Profile Picture</label>
+                            <input type="file" id="profilePictureInput" class="form-control" accept="image/*">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+
+                    <!-- Change Password -->
+                    <div class="password-section">
+                        <h3>Change Password</h3>
+                        <form id="changePasswordForm" class="profile-form">
+                            <div class="form-group">
+                                <label for="currentPassword">Current Password</label>
+                                <input type="password" id="currentPassword" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" id="confirmPassword" class="form-control" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Change Password</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/profile.js"></script>
+</body>
+</html>

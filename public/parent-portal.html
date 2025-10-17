@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent/Guardian Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/parent-portal.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Parent/Guardian Portal</h1>
+            <p>Monitor your child's attendance</p>
+        </header>
+
+        <div class="parent-portal-container">
+            <!-- Student Selector -->
+            <div class="student-selector-section">
+                <h2>Select Student</h2>
+                <select id="studentSelect" class="student-select" onchange="loadStudentData()">
+                    <option value="">Choose a student...</option>
+                </select>
+            </div>
+
+            <!-- Attendance Summary -->
+            <div class="summary-section" id="summarySection" style="display: none;">
+                <h2>Attendance Summary</h2>
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <h3>Present</h3>
+                        <p class="summary-value" id="presentCount">0</p>
+                        <p class="summary-label">Days</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Absent</h3>
+                        <p class="summary-value" id="absentCount">0</p>
+                        <p class="summary-label">Days</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Late</h3>
+                        <p class="summary-value" id="lateCount">0</p>
+                        <p class="summary-label">Days</p>
+                    </div>
+                    <div class="summary-card highlight">
+                        <h3>Attendance Rate</h3>
+                        <p class="summary-value" id="attendancePercentage">0%</p>
+                        <p class="summary-label">Overall</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date Range Filter -->
+            <div class="filter-section" id="filterSection" style="display: none;">
+                <h2>Filter Attendance</h2>
+                <div class="filter-controls">
+                    <div class="filter-group">
+                        <label>Start Date:</label>
+                        <input type="date" id="startDate" class="filter-input">
+                    </div>
+                    <div class="filter-group">
+                        <label>End Date:</label>
+                        <input type="date" id="endDate" class="filter-input">
+                    </div>
+                    <button class="btn-primary" onclick="loadAttendanceData()">Apply Filter</button>
+                </div>
+            </div>
+
+            <!-- Attendance Records -->
+            <div class="records-section" id="recordsSection" style="display: none;">
+                <h2>Attendance Records</h2>
+                <div class="records-table-container">
+                    <table class="records-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Check-in Time</th>
+                                <th>Check-out Time</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recordsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Alerts Section -->
+            <div class="alerts-section" id="alertsSection" style="display: none;">
+                <h2>Alerts & Notifications</h2>
+                <div class="alerts-list" id="alertsList"></div>
+            </div>
+
+            <!-- No Data Message -->
+            <div class="no-data" id="noData" style="display: none;">
+                <p>No attendance data available</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/parent-portal.js"></script>
+</body>
+</html>

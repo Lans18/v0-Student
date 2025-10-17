@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check-In/Check-Out - Attendance System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .checkin-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .status-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .status-not-checked {
+            background: #fee;
+            color: #c33;
+        }
+
+        .status-checked-in {
+            background: #efe;
+            color: #3c3;
+        }
+
+        .status-checked-out {
+            background: #eef;
+            color: #33c;
+        }
+
+        .time-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 15px 0;
+        }
+
+        .duration-display {
+            font-size: 18px;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-checkin {
+            flex: 1;
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-checkin:hover {
+            background: #38a169;
+        }
+
+        .btn-checkin:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-checkout {
+            flex: 1;
+            background: #f56565;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-checkout:hover {
+            background: #e53e3e;
+        }
+
+        .btn-checkout:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        .error-box {
+            background: #fee;
+            border-left: 4px solid #c33;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            color: #c33;
+        }
+
+        .success-box {
+            background: #efe;
+            border-left: 4px solid #3c3;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            color: #3c3;
+        }
+
+        .history-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .history-table th {
+            background: #f8f9fa;
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .history-table td {
+            padding: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .history-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="checkin-container">
+        <h1>Check-In / Check-Out</h1>
+        
+        <div class="status-card">
+            <h2>Today's Status</h2>
+            <div id="statusBadge" class="status-badge status-not-checked">Not Checked In</div>
+            <div id="timeDisplay" class="time-display"></div>
+            <div id="durationDisplay" class="duration-display"></div>
+            <div id="messageBox"></div>
+            
+            <div class="button-group">
+                <button id="checkInBtn" class="btn-checkin" onclick="performCheckIn()">Check In</button>
+                <button id="checkOutBtn" class="btn-checkout" onclick="performCheckOut()" disabled>Check Out</button>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <strong>Note:</strong> Check-in must be done before 8:15 AM to be marked as "Present". After 8:15 AM, you will be marked as "Late".
+        </div>
+
+        <div class="history-section">
+            <h3>Today's Attendance History</h3>
+            <table class="history-table" id="historyTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Check-In</th>
+                        <th>Check-Out</th>
+                        <th>Duration</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="historyBody">
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #999;">No records yet</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const studentId = localStorage.getItem('student_id') || 'COL-12345';
+
+        function updateStatus() {
+            fetch('php/check_in_out.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    action: 'status',
+                    student_id: studentId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                updateStatusDisplay(data);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function updateStatusDisplay(data) {
+            const badge = document.getElementById('statusBadge');
+            const timeDisplay = document.getElementById('timeDisplay');
+            const durationDisplay = document.getElementById('durationDisplay');
+            const checkInBtn = document.getElementById('checkInBtn');
+            const checkOutBtn = document.getElementById('checkOutBtn');
+
+            timeDisplay.innerHTML = '';
+            durationDisplay.innerHTML = '';
+
+            if (data.status === 'not_checked_in') {
+                badge.className = 'status-badge status-not-checked';
+                badge.textContent = 'Not Checked In';
+                checkInBtn.disabled = false;
+                checkOutBtn.disabled = true;
+            } else if (data.status === 'checked_in') {
+                badge.className = 'status-badge status-checked-in';
+                badge.textContent = 'Checked In (' + data.attendance_status + ')';
+                timeDisplay.textContent = 'Checked In: ' + formatTime(data.time_in);
+                checkInBtn.disabled = true;
+                checkOutBtn.disabled = false;
+            } else if (data.status === 'checked_out') {
+                badge.className = 'status-badge status-checked-out';
+                badge.textContent = 'Checked Out';
+                timeDisplay.textContent = 'Checked In: ' + formatTime(data.time_in) + ' | Checked Out: ' + formatTime(data.time_out);
+                durationDisplay.textContent = 'Duration: ' + data.duration_minutes + ' minutes';
+                checkInBtn.disabled = true;
+                checkOutBtn.disabled = true;
+            }
+        }
+
+        function performCheckIn() {
+            fetch('php/check_in_out.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    action: 'check_in',
+                    student_id: studentId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccess('Check-in successful! Status: ' + data.status);
+                    updateStatus();
+                } else {
+                    showError(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError('Failed to check in');
+            });
+        }
+
+        function performCheckOut() {
+            fetch('php/check_in_out.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    action: 'check_out',
+                    student_id: studentId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccess('Check-out successful! Duration: ' + data.duration_minutes + ' minutes');
+                    updateStatus();
+                } else {
+                    showError(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError('Failed to check out');
+            });
+        }
+
+        function showSuccess(message) {
+            const messageBox = document.getElementById('messageBox');
+            messageBox.innerHTML = '<div class="success-box">' + message + '</div>';
+            setTimeout(() => {
+                messageBox.innerHTML = '';
+            }, 5000);
+        }
+
+        function showError(message) {
+            const messageBox = document.getElementById('messageBox');
+            messageBox.innerHTML = '<div class="error-box">' + message + '</div>';
+            setTimeout(() => {
+                messageBox.innerHTML = '';
+            }, 5000);
+        }
+
+        function formatTime(datetime) {
+            const date = new Date(datetime);
+            return date.toLocaleString();
+        }
+
+        // Update status on page load and every 30 seconds
+        updateStatus();
+        setInterval(updateStatus, 30000);
+    </script>
+</body>
+</html>

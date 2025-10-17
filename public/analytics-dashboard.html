@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Analytics - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .analytics-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .date-filter {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .date-filter input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .date-filter button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .date-filter button:hover {
+            background: #5568d3;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-subtext {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .chart-container h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .table-container h3 {
+            padding: 20px 20px 0 20px;
+            margin: 0;
+            color: #333;
+        }
+
+        .analytics-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .analytics-table thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .analytics-table th {
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .analytics-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .analytics-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-present {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .badge-late {
+            background: #feebc8;
+            color: #7c2d12;
+        }
+
+        .badge-absent {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .export-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .export-btn:hover {
+            background: #38a169;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .date-filter {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .date-filter input,
+            .date-filter button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="analytics-container">
+        <h1>Attendance Analytics Dashboard</h1>
+
+        <!-- Date Filter -->
+        <div class="date-filter">
+            <label>Start Date:</label>
+            <input type="date" id="startDate">
+            <label>End Date:</label>
+            <input type="date" id="endDate">
+            <button onclick="loadAnalytics()">Load Analytics</button>
+            <button onclick="exportData()" class="export-btn">Export to CSV</button>
+        </div>
+
+        <!-- Overall Statistics -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <h3>Total Students</h3>
+                <div class="stat-value" id="totalStudents">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Attendance</h3>
+                <div class="stat-value" id="totalAttendance">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Present Rate</h3>
+                <div class="stat-value" id="presentRate">-</div>
+                <div class="stat-subtext">% of total</div>
+            </div>
+            <div class="stat-card">
+                <h3>Late Rate</h3>
+                <div class="stat-value" id="lateRate">-</div>
+                <div class="stat-subtext">% of total</div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid-2">
+            <div class="chart-container">
+                <h3>Daily Attendance Trend</h3>
+                <div class="chart-wrapper">
+                    <canvas id="dailyTrendChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>Hourly Distribution</h3>
+                <div class="chart-wrapper">
+                    <canvas id="hourlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance by Course and Year -->
+        <div class="grid-2">
+            <div class="chart-container">
+                <h3>Attendance by Course</h3>
+                <div class="chart-wrapper">
+                    <canvas id="courseChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>Attendance by Year Level</h3>
+                <div class="chart-wrapper">
+                    <canvas id="yearChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Students Table -->
+        <div class="table-container">
+            <h3>Top Students by Attendance</h3>
+            <table class="analytics-table" id="topStudentsTable">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Attendance Count</th>
+                        <th>Present</th>
+                        <th>Late</th>
+                        <th>Avg Duration</th>
+                    </tr>
+                </thead>
+                <tbody id="topStudentsBody">
+                    <tr><td colspan="6" style="text-align: center;">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Low Attendance Students Table -->
+        <div class="table-container">
+            <h3>Students with Low Attendance (Below 75%)</h3>
+            <table class="analytics-table" id="lowAttendanceTable">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Attendance Count</th>
+                        <th>Present</th>
+                        <th>Attendance %</th>
+                    </tr>
+                </thead>
+                <tbody id="lowAttendanceBody">
+                    <tr><td colspan="6" style="text-align: center;">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let charts = {};
+
+        // Set default dates
+        document.getElementById('startDate').valueAsDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+        document.getElementById('endDate').valueAsDate = new Date();
+
+        function loadAnalytics() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            // Load overall statistics
+            fetchAnalytics('overall', startDate, endDate, (data) => {
+                document.getElementById('totalStudents').textContent = data.total_students || 0;
+                document.getElementById('totalAttendance').textContent = data.total_attendance_records || 0;
+                document.getElementById('presentRate').textContent = (data.present_percentage || 0) + '%';
+                document.getElementById('lateRate').textContent = (data.late_percentage || 0) + '%';
+            });
+
+            // Load daily trend
+            fetchAnalytics('daily_trend', startDate, endDate, (data) => {
+                updateDailyTrendChart(data);
+            });
+
+            // Load hourly distribution
+            fetchAnalytics('hourly', startDate, endDate, (data) => {
+                updateHourlyChart(data);
+            });
+
+            // Load top students
+            fetchAnalytics('top_students', startDate, endDate, (data) => {
+                updateTopStudentsTable(data);
+            });
+
+            // Load low attendance students
+            fetchAnalytics('low_attendance', startDate, endDate, (data) => {
+                updateLowAttendanceTable(data);
+            });
+
+            // Load course data
+            fetchAnalytics('by_course', startDate, endDate, (data) => {
+                updateCourseChart(data);
+            });
+
+            // Load year level data
+            fetchAnalytics('by_year', startDate, endDate, (data) => {
+                updateYearChart(data);
+            });
+        }
+
+        function fetchAnalytics(action, startDate, endDate, callback) {
+            fetch('php/get_analytics.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    action: action,
+                    start_date: startDate,
+                    end_date: endDate
+                })
+            })
+            .then(response => response.json())
+            .then(data => callback(data))
+            .catch(error => console.error('Error:', error));
+        }
+
+        function updateDailyTrendChart(data) {
+            const ctx = document.getElementById('dailyTrendChart').getContext('2d');
+            
+            if (charts.dailyTrend) {
+                charts.dailyTrend.destroy();
+            }
+
+            charts.dailyTrend = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => d.date),
+                    datasets: [
+                        {
+                            label: 'Present',
+                            data: data.map(d => d.present),
+                            borderColor: '#48bb78',
+                            backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Late',
+                            data: data.map(d => d.late),
+                            borderColor: '#f6ad55',
+                            backgroundColor: 'rgba(246, 173, 85, 0.1)',
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateHourlyChart(data) {
+            const ctx = document.getElementById('hourlyChart').getContext('2d');
+            
+            if (charts.hourly) {
+                charts.hourly.destroy();
+            }
+
+            charts.hourly = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.hour + ':00'),
+                    datasets: [
+                        {
+                            label: 'Present',
+                            data: data.map(d => d.present),
+                            backgroundColor: '#48bb78'
+                        },
+                        {
+                            label: 'Late',
+                            data: data.map(d => d.late),
+                            backgroundColor: '#f6ad55'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCourseChart(data) {
+            const ctx = document.getElementById('courseChart').getContext('2d');
+            
+            if (charts.course) {
+                charts.course.destroy();
+            }
+
+            charts.course = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.map(d => d.course),
+                    datasets: [{
+                        data: data.map(d => d.present_percentage),
+                        backgroundColor: [
+                            '#667eea',
+                            '#764ba2',
+                            '#f093fb',
+                            '#4facfe',
+                            '#43e97b'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateYearChart(data) {
+            const ctx = document.getElementById('yearChart').getContext('2d');
+            
+            if (charts.year) {
+                charts.year.destroy();
+            }
+
+            charts.year = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.year_level),
+                    datasets: [{
+                        label: 'Present %',
+                        data: data.map(d => d.present_percentage),
+                        backgroundColor: '#667eea'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateTopStudentsTable(data) {
+            const tbody = document.getElementById('topStudentsBody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No data available</td></tr>';
+                return;
+            }
+
+            data.forEach(student => {
+                const row = `
+                    <tr>
+                        <td>${student.student_id}</td>
+                        <td>${student.first_name} ${student.last_name}</td>
+                        <td>${student.attendance_count}</td>
+                        <td><span class="badge badge-present">${student.present_count}</span></td>
+                        <td><span class="badge badge-late">${student.late_count}</span></td>
+                        <td>${student.avg_duration} min</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function updateLowAttendanceTable(data) {
+            const tbody = document.getElementById('lowAttendanceBody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">All students have good attendance</td></tr>';
+                return;
+            }
+
+            data.forEach(student => {
+                const row = `
+                    <tr>
+                        <td>${student.student_id}</td>
+                        <td>${student.first_name} ${student.last_name}</td>
+                        <td>${student.email}</td>
+                        <td>${student.attendance_count}</td>
+                        <td><span class="badge badge-present">${student.present_count}</span></td>
+                        <td><span class="badge badge-absent">${student.attendance_percentage}%</span></td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function exportData() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            fetch('php/export_analytics.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    start_date: startDate,
+                    end_date: endDate
+                })
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `attendance_report_${startDate}_to_${endDate}.csv`;
+                a.click();
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Load analytics on page load
+        loadAnalytics();
+    </script>
+</body>
+</html>

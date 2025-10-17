@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Operations</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bulk-operations.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Bulk Operations</h1>
+            <p>Perform batch operations on attendance records</p>
+        </header>
+
+        <div class="bulk-operations-container">
+            <!-- Operation Tabs -->
+            <div class="operation-tabs">
+                <button class="tab-btn active" data-tab="mark-attendance">Mark Attendance</button>
+                <button class="tab-btn" data-tab="update-attendance">Update Attendance</button>
+                <button class="tab-btn" data-tab="send-notifications">Send Notifications</button>
+                <button class="tab-btn" data-tab="import-export">Import/Export</button>
+                <button class="tab-btn" data-tab="history">Operation History</button>
+            </div>
+
+            <!-- Mark Attendance Tab -->
+            <div class="tab-content active" id="mark-attendance">
+                <h2>Bulk Mark Attendance</h2>
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>Select Date:</label>
+                        <input type="date" id="markDate" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Select Class/Course:</label>
+                        <select id="markCourse" class="form-input">
+                            <option value="">All Students</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status:</label>
+                        <select id="markStatus" class="form-input">
+                            <option value="present">Present</option>
+                            <option value="absent">Absent</option>
+                            <option value="late">Late</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" onclick="bulkMarkAttendance()">Mark Attendance</button>
+                </div>
+            </div>
+
+            <!-- Update Attendance Tab -->
+            <div class="tab-content" id="update-attendance">
+                <h2>Bulk Update Attendance</h2>
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>Upload CSV File:</label>
+                        <input type="file" id="updateFile" accept=".csv" class="form-input">
+                        <small>CSV format: attendance_id, new_status</small>
+                    </div>
+                    <button class="btn-primary" onclick="bulkUpdateAttendance()">Update Attendance</button>
+                </div>
+            </div>
+
+            <!-- Send Notifications Tab -->
+            <div class="tab-content" id="send-notifications">
+                <h2>Bulk Send Notifications</h2>
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>Notification Type:</label>
+                        <select id="notificationType" class="form-input">
+                            <option value="attendance_marked">Attendance Marked</option>
+                            <option value="late_arrival">Late Arrival</option>
+                            <option value="absence">Absence</option>
+                            <option value="daily_summary">Daily Summary</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Select Recipients:</label>
+                        <select id="notificationRecipients" class="form-input" multiple>
+                            <option value="all">All Students</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" onclick="bulkSendNotifications()">Send Notifications</button>
+                </div>
+            </div>
+
+            <!-- Import/Export Tab -->
+            <div class="tab-content" id="import-export">
+                <h2>Import/Export Attendance</h2>
+                <div class="form-section">
+                    <h3>Import from CSV</h3>
+                    <div class="form-group">
+                        <label>Select CSV File:</label>
+                        <input type="file" id="importFile" accept=".csv" class="form-input">
+                        <small>CSV format: student_id, date, time, status</small>
+                    </div>
+                    <button class="btn-primary" onclick="importCSV()">Import Attendance</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>Export to CSV</h3>
+                    <div class="form-group">
+                        <label>Start Date:</label>
+                        <input type="date" id="exportStartDate" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date:</label>
+                        <input type="date" id="exportEndDate" class="form-input">
+                    </div>
+                    <button class="btn-primary" onclick="exportCSV()">Export Attendance</button>
+                </div>
+            </div>
+
+            <!-- Operation History Tab -->
+            <div class="tab-content" id="history">
+                <h2>Operation History</h2>
+                <div class="history-table-container">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Operation ID</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Total Records</th>
+                                <th>Processed</th>
+                                <th>Created At</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-section" id="progressSection" style="display: none;">
+                <h3>Operation Progress</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p id="progressText">Processing...</p>
+            </div>
+
+            <!-- Message -->
+            <div class="message" id="successMessage" style="display: none;">
+                <p id="messageText"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/bulk-operations.js"></script>
+</body>
+</html>

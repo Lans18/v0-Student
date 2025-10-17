@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner - Attendance System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/scanner.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-logo">
+            <div class="logo">A</div>
+            <span class="header-title">Attendance System</span>
+        </div>
+        <nav class="header-nav">
+            <a href="student-dashboard.html">Dashboard</a>
+            <a href="qr-scanner.html" class="active">Scanner</a>
+            <a href="attendance-records.html">Records</a>
+            <a href="profile.html">Profile</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </nav>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="scanner-container">
+        <div class="container">
+            <div class="scanner-wrapper">
+                <!-- Scanner Section -->
+                <div class="scanner-section">
+                    <h1>QR Code Scanner</h1>
+                    <p>Point your camera at the QR code to mark attendance</p>
+
+                    <div class="scanner-box">
+                        <video id="scanner-video" class="scanner-video"></video>
+                        <canvas id="scanner-canvas" class="scanner-canvas" style="display: none;"></canvas>
+                        <div class="scanner-overlay">
+                            <div class="scanner-frame"></div>
+                        </div>
+                    </div>
+
+                    <div class="scanner-controls">
+                        <button id="startScannerBtn" class="btn btn-primary">Start Scanner</button>
+                        <button id="stopScannerBtn" class="btn btn-secondary" style="display: none;">Stop Scanner</button>
+                        <button id="uploadQRBtn" class="btn btn-secondary">Upload QR Image</button>
+                        <input type="file" id="qrFileInput" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+
+                <!-- Manual Entry Section -->
+                <div class="manual-entry-section">
+                    <h2>Manual Entry</h2>
+                    <p>Or enter the QR code data manually</p>
+
+                    <form id="manualEntryForm" class="manual-form">
+                        <div class="form-group">
+                            <label for="qrData">QR Code Data</label>
+                            <input type="text" id="qrData" class="form-control" placeholder="Paste QR code data here">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Status Messages -->
+            <div id="successMessage" class="message success-message" style="display: none;"></div>
+            <div id="errorMessage" class="message error-message" style="display: none;"></div>
+
+            <!-- Scan History -->
+            <div class="card" style="margin-top: 30px;">
+                <div class="card-header">
+                    <h2 class="card-title">Today's Scans</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table id="scanHistoryTable">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="3" style="text-align: center; padding: 20px;">No scans yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/scanner.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Settings</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/sms-settings.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>SMS Settings</h1>
+            <p>Configure SMS notifications for your account</p>
+        </header>
+
+        <div class="sms-settings-container">
+            <!-- Phone Number Section -->
+            <div class="settings-section">
+                <h2>Phone Number</h2>
+                <div class="phone-section">
+                    <div class="phone-display">
+                        <p id="currentPhone">No phone number added</p>
+                        <span id="verificationStatus" class="status-badge"></span>
+                    </div>
+                    <button class="btn-secondary" onclick="togglePhoneForm()">Add/Update Phone</button>
+                </div>
+
+                <!-- Phone Form -->
+                <div id="phoneForm" class="phone-form" style="display: none;">
+                    <div class="form-group">
+                        <label>Phone Number (International Format)</label>
+                        <input type="tel" id="phoneNumber" placeholder="+1234567890" class="form-input">
+                        <small>Include country code (e.g., +1 for USA, +44 for UK)</small>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn-primary" onclick="updatePhoneNumber()">Update Phone</button>
+                        <button class="btn-secondary" onclick="togglePhoneForm()">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- Verification Form -->
+                <div id="verificationForm" class="verification-form" style="display: none;">
+                    <p>A verification code has been sent to your phone number.</p>
+                    <div class="form-group">
+                        <label>Verification Code</label>
+                        <input type="text" id="verificationCode" placeholder="Enter 6-digit code" class="form-input" maxlength="6">
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn-primary" onclick="verifyPhone()">Verify</button>
+                        <button class="btn-secondary" onclick="togglePhoneForm()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMS Notification Types -->
+            <div class="settings-section">
+                <h2>SMS Notification Types</h2>
+                <div class="notification-types">
+                    <div class="notification-type">
+                        <div class="type-header">
+                            <h3>Attendance Marked</h3>
+                            <label class="toggle-switch">
+                                <input type="checkbox" name="smsType" value="attendance_marked">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <p>Receive SMS when your attendance is marked</p>
+                    </div>
+
+                    <div class="notification-type">
+                        <div class="type-header">
+                            <h3>Late Arrival Alerts</h3>
+                            <label class="toggle-switch">
+                                <input type="checkbox" name="smsType" value="late_arrival" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <p>Get alerted when you're marked late</p>
+                    </div>
+
+                    <div class="notification-type">
+                        <div class="type-header">
+                            <h3>Absence Notifications</h3>
+                            <label class="toggle-switch">
+                                <input type="checkbox" name="smsType" value="absence" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <p>Receive SMS when you're marked absent</p>
+                    </div>
+
+                    <div class="notification-type">
+                        <div class="type-header">
+                            <h3>Class Reminders</h3>
+                            <label class="toggle-switch">
+                                <input type="checkbox" name="smsType" value="reminder">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <p>Get reminded before your classes</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMS Usage -->
+            <div class="settings-section">
+                <h2>SMS Usage</h2>
+                <div class="usage-stats">
+                    <div class="usage-stat">
+                        <span class="stat-label">SMS Sent This Month</span>
+                        <span class="stat-value" id="smsSentCount">0</span>
+                    </div>
+                    <div class="usage-stat">
+                        <span class="stat-label">SMS Failed</span>
+                        <span class="stat-value" id="smsFailedCount">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="settings-actions">
+                <button class="btn-primary" onclick="saveSMSSettings()">Save Settings</button>
+                <button class="btn-secondary" onclick="resetSMSSettings()">Reset to Default</button>
+            </div>
+
+            <!-- Message -->
+            <div class="message" id="successMessage" style="display: none;">
+                <p>Settings saved successfully!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/sms-settings.js"></script>
+</body>
+</html>

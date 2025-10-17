@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - Attendance System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-logo">
+            <div class="logo">A</div>
+            <span class="header-title">Attendance System</span>
+        </div>
+        <nav class="header-nav">
+            <a href="teacher-dashboard.html" class="active">Dashboard</a>
+            <a href="class-attendance.html">Classes</a>
+            <a href="attendance-reports.html">Reports</a>
+            <a href="profile.html">Profile</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </nav>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-container">
+        <div class="container">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1>Welcome, <span id="teacherName">Teacher</span>!</h1>
+                <p>Manage your class attendance</p>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value" id="totalStudents">0</div>
+                    <div class="stat-label">Total Students</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📚</div>
+                    <div class="stat-value" id="totalClasses">0</div>
+                    <div class="stat-label">Classes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✓</div>
+                    <div class="stat-value" id="todayPresent">0</div>
+                    <div class="stat-label">Present Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✗</div>
+                    <div class="stat-value" id="todayAbsent">0</div>
+                    <div class="stat-label">Absent Today</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="action-buttons">
+                    <a href="class-attendance.html" class="btn btn-primary">
+                        <span>📋</span> View Classes
+                    </a>
+                    <a href="attendance-reports.html" class="btn btn-secondary">
+                        <span>📊</span> View Reports
+                    </a>
+                    <a href="profile.html" class="btn btn-secondary">
+                        <span>👤</span> Edit Profile
+                    </a>
+                </div>
+            </div>
+
+            <!-- Classes List -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Your Classes</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table id="classesTable">
+                            <thead>
+                                <tr>
+                                    <th>Class Name</th>
+                                    <th>Course</th>
+                                    <th>Students</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" style="text-align: center; padding: 20px;">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/teacher-dashboard.js"></script>
+</body>
+</html>

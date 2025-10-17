@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Attendance Reports</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/reports.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Real-time Attendance Reports</h1>
+            <p>View and analyze attendance data in real-time</p>
+        </header>
+
+        <div class="reports-container">
+            <!-- Report Type Selector -->
+            <div class="report-selector">
+                <button class="report-btn active" data-report="student">Student Report</button>
+                <button class="report-btn" data-report="class">Class Report</button>
+                <button class="report-btn" data-report="daily">Daily Report</button>
+                <button class="report-btn" data-report="low-attendance">Low Attendance</button>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-section">
+                <div class="filter-group">
+                    <label>Start Date:</label>
+                    <input type="date" id="startDate" class="filter-input">
+                </div>
+                <div class="filter-group">
+                    <label>End Date:</label>
+                    <input type="date" id="endDate" class="filter-input">
+                </div>
+                <div class="filter-group" id="studentFilter" style="display: none;">
+                    <label>Student ID:</label>
+                    <input type="text" id="studentId" class="filter-input" placeholder="e.g., COL-12345">
+                </div>
+                <div class="filter-group" id="courseFilter" style="display: none;">
+                    <label>Course:</label>
+                    <select id="courseId" class="filter-input">
+                        <option value="">Select Course</option>
+                    </select>
+                </div>
+                <button class="btn-primary" onclick="generateReport()">Generate Report</button>
+                <button class="btn-secondary" onclick="exportReport()">Export CSV</button>
+            </div>
+
+            <!-- Statistics Summary -->
+            <div class="stats-summary" id="statsSummary" style="display: none;">
+                <div class="stat-card">
+                    <h3>Present</h3>
+                    <p class="stat-value" id="presentCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Absent</h3>
+                    <p class="stat-value" id="absentCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Late</h3>
+                    <p class="stat-value" id="lateCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Attendance %</h3>
+                    <p class="stat-value" id="attendancePercentage">0%</p>
+                </div>
+            </div>
+
+            <!-- Report Table -->
+            <div class="report-table-container">
+                <table class="report-table" id="reportTable">
+                    <thead>
+                        <tr id="tableHeader"></tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+
+            <!-- No Data Message -->
+            <div class="no-data" id="noData" style="display: none;">
+                <p>No data available for the selected criteria</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/reports.js"></script>
+</body>
+</html>
